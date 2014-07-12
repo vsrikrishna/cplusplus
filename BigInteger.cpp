@@ -9,6 +9,7 @@ Got help from cplusplus.com
 #include "iostream"
 #include "algorithm"
 #include "vector"
+#include "iterator"
 using namespace std;
 
 class BigInt{
@@ -49,7 +50,7 @@ BigInt& BigInt::operator +=(const BigInt& a)
 	   maxSize = digits.size();
    }
 
-   for(unsigned int i = 0; i < maxSize; i++)
+   for (unsigned int i = 0; i <maxSize; i++)
    {
 	   if(i<a.digits.size())
           num=digits[i]+a.digits[i]+carry;
@@ -82,8 +83,8 @@ BigInt BigInt::operator +(const BigInt& a) const
 
 std::ostream& operator <<(std::ostream& out,BigInt a)
 {
-   for(unsigned int i=0; i < a.digits.size(); i++){
-      out << a.digits[i] << endl;
+	for (vector<int>::reverse_iterator it = a.digits.rbegin(); it != a.digits.rend(); it++){
+      out << *it;
    }
    return out;
 }
@@ -99,5 +100,7 @@ int main(){
    B4+=B2;
    B4+=B3;
    cout << "B4 is"<< B4 << endl;
+   cin.clear();
+   getchar();
    return 0;
 }

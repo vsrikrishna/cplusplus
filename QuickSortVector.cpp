@@ -1,8 +1,7 @@
 /*
-Quick Sort Implementation 1
+Quick Sort Implementation
 Basic implementation of quick sort algorithm
 July 21 2013 
-3 hours
 */
 
 #include "iostream"

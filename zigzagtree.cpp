@@ -37,7 +37,7 @@ class BST{
 	Node* root;
 	void insertData(int key, Node* root);
 	void BFS(Node* root);
-	void zigzagsort(Node* root);
+	void zigzagPrint(Node* root);
 public:
 	BST(){
 		root = NULL;
@@ -50,7 +50,7 @@ public:
 	}
 	void insertData(int key);
 	void BFS();
-	void zigzagsort();
+	void zigzagPrint();
 };
 
 void BST::BFS(Node* root){
@@ -84,7 +84,7 @@ void BST::BFS(Node* root){
 	std::cout << std::endl;
 }
 
-void BST::zigzagsort(Node* pRoot){
+void BST::zigzagPrint(Node* pRoot){
     if (pRoot == NULL){
        return;
     }	
@@ -126,10 +126,10 @@ void BST::BFS(){
 	}
 }
 
-void BST::zigzagsort(){
+void BST::zigzagPrint(){
 	if (root == NULL) return;
 	else{
-		zigzagsort(root);
+		zigzagPrint(root);
 	}
 }
 void BST::insertData(int key){
@@ -177,7 +177,7 @@ int main(){
 	BT1.insertData(3);
 	//BT1.insertData(8);
 	BT1.BFS();
-	BT1.zigzagsort();
+	BT1.zigzagPrint();
 	getchar();
 	return 0;
 }

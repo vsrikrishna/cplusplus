@@ -58,13 +58,17 @@ void BST::BFS(){
 }
 void BST::BFS(Node* root){
    queue<Node*> q;
+
    q.push(root);
    vector<int> values;
    bool duplicate = false;
+   int printCount = 1;
+   int nextLevelCount = 0;
 
    while(!q.empty()){
       Node* n1 = q.front();
 
+	  /*
 	  for(vector<int>::iterator it = values.begin(); it!=values.end();it++){
 		  if(*it == n1->value){
 			  duplicate = true;
@@ -74,21 +78,36 @@ void BST::BFS(Node* root){
 	  if(!duplicate){
 	     values.push_back(n1->value);
          cout <<"::"<<n1->value;
-	  }
-      q.pop();
+	  }*/
+
+      std::cout<<n1->value<<" ";
+	  
+	  q.pop();
+	  printCount--;
 
 	  if(n1->left!=NULL){
          q.push(n1->left);
+		 nextLevelCount++;
       }
       if(n1->right!=NULL){
          q.push(n1->right);
-      }
+		 nextLevelCount++;
+	  }
+
+	  if (printCount == 0){
+		  std::cout << std::endl;
+		  printCount = nextLevelCount;
+		  nextLevelCount = 0;
+	  }
+
    }
 }
 
 void BST::insertData(int key){
 	if(root == NULL){
-		return;
+        root = new Node;
+		root->left = root->right = NULL;
+		root->value = key;
 	}
     else{
       insertData(key, root);
@@ -122,15 +141,16 @@ void BST::insertData(int key, Node* root){
 }
 
 int main(){
-BST BT1(7);
+BST BT1;
+BT1.insertData(4);
 BT1.insertData(3);
 BT1.insertData(5);
 BT1.insertData(2);
-BT1.insertData(4);
+BT1.insertData(1);
+BT1.insertData(7);
 BT1.insertData(9);
-BT1.insertData(3);
 BT1.insertData(8);
 BT1.BFS();
-getch();
+getchar();
 return 0;
 }

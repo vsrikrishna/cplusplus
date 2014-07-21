@@ -4,23 +4,23 @@
 using namespace std;
  
 int found=0;
- 
-class node{
-    public:
-        char info;
-        string Word;
-        class node* ptrs[256];
-        node(){
-            for(int i=0;i<256;i++){
-                ptrs[i]=NULL;
-            }
-            info=NULL;
-            Word="";
-        }
+
+struct node{
+    char info;
+    string Word;
+    node* ptrs[256];
 };
- 
-void insertword(string word,int pos,class node * root){
-    if(word.length()==pos){
+
+void insertword(string word,int pos, node*& root){
+	if (root == NULL){
+		root = new node;
+		for (int i = 0; i<256; i++){
+			root->ptrs[i] = NULL;
+		}
+		root->info = NULL;
+		root->Word = "";
+	}
+	if(word.length()==pos){
         root->Word=word;
         return;
     }
@@ -28,6 +28,9 @@ void insertword(string word,int pos,class node * root){
         node *newnode;
         newnode= new node;
         newnode->info=word[pos];
+		for (int i = 0; i<256; i++){
+			newnode->ptrs[i] = NULL;
+		}
         root->ptrs[word[pos]]=newnode;
         insertword(word,pos+1,root->ptrs[word[pos]]);
     }
@@ -36,7 +39,7 @@ void insertword(string word,int pos,class node * root){
 		insertword(word,pos+1,root->ptrs[word[pos]]);
 }
  
-void find(string key,int pos, class node * root){
+void find(string key,int pos,node * root){
     if((key != root->Word) && (root->ptrs[key[pos]] != NULL))
         find(key,pos+1,root->ptrs[key[pos]]);
     else if(key==root->Word){
@@ -45,7 +48,7 @@ void find(string key,int pos, class node * root){
     }
 }
  
-void printall(class node * root){
+void printall(node * root){
     for(int i=0;i<256;i++)
         if(root->ptrs[i]!=NULL){
             printall(root->ptrs[i]);
@@ -54,7 +57,7 @@ void printall(class node * root){
         cout<<" -> "<<root->Word<<endl;
 }
  
-void suggest(string key,int pos, class node * root){
+void suggest(string key,int pos, node * root){
     if((key != root->Word) && (root->ptrs[key[pos]] != NULL)){
             suggest(key,pos+1,root->ptrs[key[pos]]);
     }
@@ -64,24 +67,25 @@ void suggest(string key,int pos, class node * root){
 }
  
 int main(){
-    //ifstream in("wordlist.txt");
+    ifstream in("wordlist.txt");
     string word,current="",key;
-    node *root;
-    root = new node;
-    while(in){
-        in>>word;
+     node* root = NULL;
+    while(!in.eof()){
+        getline(in,word);
         insertword(word,0,root);
     }
     in.close();
-    //cout<<endl<<"Trie Construction Successful"<<endl;
-    //printall(root);
+    cout<<endl<<"Trie Construction Successful"<<endl;
+    printall(root);
     cout<<"Enter the word to be searched for : ";
-    cin>>key;
+    getline(std::cin,key);
     find(key,0,root);
     if(!found){
         cout<<endl<<"The spelling is incorrect, Possible suggestions are :"<<endl;
         suggest(key,0,root);
     }
+	cin.clear();
 	getchar();
     return 0;
 }
+

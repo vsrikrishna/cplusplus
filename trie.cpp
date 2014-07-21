@@ -3,8 +3,6 @@
 #include<string>
 using namespace std;
  
-int found=0;
-
 struct node{
     char info;
     string Word;
@@ -38,16 +36,19 @@ void insertword(string word,int pos, node*& root){
 
 		insertword(word,pos+1,root->ptrs[word[pos]]);
 }
- 
-void find(string key,int pos,node * root){
-    if((key != root->Word) && (root->ptrs[key[pos]] != NULL))
-        find(key,pos+1,root->ptrs[key[pos]]);
-    else if(key==root->Word){
-        cout<<"The spelling of the word '"<<root->Word<<"' is correct"<<endl;
-        found=1;
-    }
+
+int find(string key, int pos, node * root){
+	if ((key != root->Word) && (root->ptrs[key[pos]] != NULL))
+		return find(key, pos + 1, root->ptrs[key[pos]]);
+	else if (key == root->Word){
+		cout << "The spelling of the word '" << root->Word << "' is correct" << endl;
+		//found = 1;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
- 
 void printall(node * root){
     for(int i=0;i<256;i++)
         if(root->ptrs[i]!=NULL){
@@ -79,8 +80,7 @@ int main(){
     printall(root);
     cout<<"Enter the word to be searched for : ";
     getline(std::cin,key);
-    find(key,0,root);
-    if(!found){
+    if (!find(key, 0, root)){
         cout<<endl<<"The spelling is incorrect, Possible suggestions are :"<<endl;
         suggest(key,0,root);
     }

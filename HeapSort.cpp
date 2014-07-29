@@ -1,6 +1,11 @@
 #include "iostream"
-#include ""
 using namespace std;
+
+void print(int *input, int n)
+{
+	for (int i = 0; i < n; i++)
+		cout << input[i] << " ";
+}
 
 void shiftRight(int* arr, int low, int high)
 {
@@ -36,7 +41,6 @@ void shiftRight(int* arr, int low, int high)
 			break;
 		}
 	}
-	return;
 }
 void heapify(int* arr, int low, int high)
 {
@@ -49,12 +53,9 @@ void heapify(int* arr, int low, int high)
 		shiftRight(arr, midIdx, high);
 		--midIdx;
 	}
-	return;
 }
 void heapSort(int* arr, int size)
 {
-	//assert(arr);
-	//assert(size > 0);
 	/*This will put max element in the index 0*/
 	heapify(arr, 0, size - 1);
 	int high = size - 1;
@@ -68,9 +69,16 @@ void heapSort(int* arr, int size)
 		/*Ensure heap property on remaining elements*/
 		shiftRight(arr, 0, high);
 	}
-	return;
 }
 
 int main(){
+	int input[10] = { 143, 123, 222, 186, 235, 9, 905, 428, 543, 373 };
+	cout << "Input: ";
+	print(input, 10);
+	heapSort(input, 10);
+	cout << "\nOutput: ";
+	print(input, 10);
+	cout << "\n";
+	getchar();
 	return 0;
 }

@@ -21,12 +21,13 @@ void prtFunc3(int n){
 	cout << "3" << endl;
 }
 int main(){
-	thread t1(prtFunc1, 1);
-	thread t2(prtFunc2, 2);
-	thread t3(prtFunc3, 3);
-	t2.join();
-	t1.join();
-	t3.detach();
+	thread t1(prtFunc1, 5);
+	thread t2(prtFunc2, 5);
+	thread t3(prtFunc3, 10);
+	//t2.join();
+	//t1.join();
+	t3.join();
+	//t3.detach();
 	getchar();
     return 0;
 }

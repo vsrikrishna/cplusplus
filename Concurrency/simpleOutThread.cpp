@@ -7,10 +7,10 @@ void any_random_func(){
 	cout << "Output from thread" << endl;
 }
 int main(){
-	std::thread t(any_random_func);
+	
    //Launch a thread
-   std::thread t(any_random_func, i);
-   
+	std::thread t(any_random_func);
+
    //Join the thread with the main thread
    t.join();
 

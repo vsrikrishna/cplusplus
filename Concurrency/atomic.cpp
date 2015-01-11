@@ -5,58 +5,51 @@
 using namespace std;
 
 const unsigned int NTHREADS = 20;
-const int ITERS = 100000;
+const int ITERS = 100;
 
-mutex m1, m2, m3, m4, m5;
+mutex m1, m2, m3;
 int counter = 0;
 
 void increment(int n)
 {
+	cout <<"Inside increment method"<< endl;
 	for (int i = 0; i<ITERS; i++)
 	{
-		lock(m1, m2, m3, m4, m5);
-		lock_guard<mutex> l1(m1, std::adopt_lock);
-		lock_guard<mutex> l2(m2, std::adopt_lock);
-		lock_guard<mutex> l3(m3, std::adopt_lock);
-		lock_guard<mutex> l4(m4, std::adopt_lock);
-		lock_guard<mutex> l5(m5, std::adopt_lock);
-
+		lock_guard<mutex> l1(m1);
+		lock_guard<mutex> l2(m2);
+		lock_guard<mutex> l3(m3);
 		counter++;
 	}
 }
 
 void decrement(int n)
 {
+	cout << "Inside decrement method" << endl;
 	for (int i = 0; i<ITERS; i++)
 	{
-		lock(m1, m2, m3, m4, m5);
-		lock_guard<mutex> l1(m1, std::adopt_lock);
-		lock_guard<mutex> l2(m2, std::adopt_lock);
-		lock_guard<mutex> l3(m3, std::adopt_lock);
-		lock_guard<mutex> l4(m4, std::adopt_lock);
-		lock_guard<mutex> l5(m5, std::adopt_lock);
-
+		lock_guard<mutex> l1(m1);
+		lock_guard<mutex> l2(m2);
+		lock_guard<mutex> l3(m3);
 		counter--;
 	}
 }
 
 
-int main(int argc, char* argv[])
+int main()
 {
 	vector<thread> vt;
 
-	cout << "The counter is " << counter << endl;
-
-	for (unsigned int i = 0; i<NTHREADS; i++)
-	if (i % 2 == 0)
-		vt.push_back(thread(increment, i));
-	else
-		vt.push_back(thread(decrement, i));
-
+	for (unsigned int i = 0; i < NTHREADS; i++){
+		if (i % 2 == 0)
+			vt.push_back(thread(increment, i));
+		else
+			vt.push_back(thread(decrement, i));
+	}
+	
 	for (thread &t : vt)
 		t.join();
 
-	cout << "The counter is " << counter << endl;
+    cout << "The counter is " << counter << endl;
 	getchar();
 
 	return 0;

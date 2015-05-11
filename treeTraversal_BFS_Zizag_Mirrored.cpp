@@ -12,12 +12,26 @@
 *     /     \
 *    9       8
 *
-* Expected output:
-*    1
-*    3 5
-*    2 4 7
-*    9 8
-*    ==========
+* Expected output(BFS):
+* 1
+* 3 5
+* 2 4 7
+* 9 8
+* ==========
+*
+* Expected output(ZigZag)
+* 1
+* 5 3
+* 2 4 7
+* 8 9
+* ===========
+*
+* Expected output(Mirrored Binary Tree)
+*
+*
+*
+*
+*
 */
 
 #include "iostream"
@@ -38,6 +52,7 @@ class BST{
 	void insertData(int key, Node* root);
 	void BFS(Node* root);
 	void zigzagPrint(Node* root);
+	void mirrorBinaryTree(Node* root);
 public:
 	BST(){
 		root = NULL;
@@ -51,34 +66,36 @@ public:
 	void insertData(int key);
 	void BFS();
 	void zigzagPrint();
+	void mirrorBinaryTree();
 };
 
 void BST::BFS(Node* root){
 	queue<Node*> q;
+	int popCount, inCount;
+	popCount = inCount = 0;
 	q.push(root);
+	popCount++;
 	vector<int> values;
 	bool duplicate = false;
-
+	
 	while (!q.empty()){
 		Node* n1 = q.front();
-
-	/*	for (vector<int>::iterator it = values.begin(); it != values.end(); it++){
-			if (*it == n1->value){
-				duplicate = true;
-			}
-		}
-
-		if (!duplicate){*/
-			values.push_back(n1->value);
-			cout << "::" << n1->value;
-		//}
+		
+		cout << n1->value<<" ";		
 		q.pop();
-
+		popCount--;
 		if (n1->left != NULL){
 			q.push(n1->left);
+			inCount++;
 		}
 		if (n1->right != NULL){
 			q.push(n1->right);
+			inCount++;
+		}
+		if (popCount == 0){
+			popCount = inCount;
+			inCount = 0;
+			cout << endl;
 		}
 	}
 	std::cout << std::endl;
@@ -90,14 +107,14 @@ void BST::zigzagPrint(Node* pRoot){
     }	
 
 	std::stack<Node*> levels[2];
-	int current = 0; 
-	int next = 1;
+	int current = 1; 
+	int next = 0;
 
 	levels[current].push(pRoot);
 	while(!levels[0].empty() || !levels[1].empty()){
         Node* pNode = levels[current].top();
-        levels[current].pop();
-        std::cout<<pNode->value<<std::endl;
+		levels[current].pop();
+        std::cout<<pNode->value<<" ";
 		if (current){
 			if (pNode->left != NULL)
 				levels[next].push(pNode->left);
@@ -117,6 +134,20 @@ void BST::zigzagPrint(Node* pRoot){
 			next = 1 - next;
 		}
 	}
+	cout << endl;
+}
+
+void BST::mirrorBinaryTree(Node *pRoot){
+	if (pRoot == NULL) return;
+	else{
+		if (pRoot->left != NULL || pRoot->right != NULL){
+			Node *temp = pRoot->left;
+			pRoot->left = pRoot->right;
+			pRoot->right = temp;
+			mirrorBinaryTree(pRoot->left);
+			mirrorBinaryTree(pRoot->right);
+		}
+	}
 }
 
 void BST::BFS(){
@@ -132,6 +163,14 @@ void BST::zigzagPrint(){
 		zigzagPrint(root);
 	}
 }
+
+void BST::mirrorBinaryTree(){
+	if (root == NULL) return;
+	else{
+		mirrorBinaryTree(root);
+	}
+}
+
 void BST::insertData(int key){
 	if (root == NULL){
 		return;
@@ -168,16 +207,26 @@ void BST::insertData(int key, Node* root){
 }
 
 int main(){
-	BST BT1(7);
+	BST BT1(6);
 	BT1.insertData(3);
-	BT1.insertData(5);
+	BT1.insertData(8);
 	BT1.insertData(2);
 	BT1.insertData(4);
+	BT1.insertData(1);
+	BT1.insertData(5);
+	BT1.insertData(7);
 	BT1.insertData(9);
-	BT1.insertData(3);
-	//BT1.insertData(8);
+	BT1.insertData(10);
+	cout << "BFS print is:" << endl;
 	BT1.BFS();
+	
+	cout << "zigzag print is:" << endl;
 	BT1.zigzagPrint();
+
+	BT1.mirrorBinaryTree();
+	cout << "mirrored BST BSF print is:" << endl;
+	BT1.BFS();
+
 	getchar();
 	return 0;
 }

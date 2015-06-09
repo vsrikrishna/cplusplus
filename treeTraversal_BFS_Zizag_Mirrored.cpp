@@ -205,7 +205,6 @@ void BST::insertData(int key, Node* root){
 		}
 	}
 }
-
 int main(){
 	BST BT1(6);
 	BT1.insertData(3);
@@ -226,7 +225,6 @@ int main(){
 	BT1.mirrorBinaryTree();
 	cout << "mirrored BST BSF print is:" << endl;
 	BT1.BFS();
-
 	getchar();
 	return 0;
 }

@@ -1,3 +1,9 @@
+/*
+Complexity of hashMap
+Insertion: O(1) if insertion is at head of linkedlist
+Deletion:  O(1+k/n) - where k is no of collisions in one location
+Search:    O(1+k/n) 
+*/
 #include "iostream"
 #include "string"
 using namespace std;

@@ -1,18 +1,24 @@
-#include<iostream>
-#include<fstream>
-#include<string>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <algorithm>
 using namespace std;
  
 struct node{
-    char info;
-    string Word;
-    node* ptrs[256];
+	char info; // to store the pos character of Word 
+    string Word; // to store the entire word after last letter
+    node* ptrs[26]; // to store pointers to next character
 };
 
-void insertword(string word,int pos, node*& root){
+/*
+For n words of average length m the complexities are:
+Time Complexity: O(m) since we have to insert each letter into the trie
+Space Complexity: O(mn) since we have to store each m letter for n words
+*/
+void insertword(string word,int pos, node* root){
 	if (root == NULL){
 		root = new node;
-		for (int i = 0; i<256; i++){
+		for (int i = 0; i<26; i++){
 			root->ptrs[i] = NULL;
 		}
 		root->info = NULL;
@@ -22,24 +28,24 @@ void insertword(string word,int pos, node*& root){
         root->Word=word;
         return;
     }
-    if( root-> ptrs[word[pos]]==NULL ){
+    if( root-> ptrs[word[pos]-'a']==NULL ){
         node *newnode;
         newnode= new node;
         newnode->info=word[pos];
-		for (int i = 0; i<256; i++){
+		for (int i = 0; i<26; i++){
 			newnode->ptrs[i] = NULL;
 		}
-        root->ptrs[word[pos]]=newnode;
-        insertword(word,pos+1,root->ptrs[word[pos]]);
+        root->ptrs[word[pos]-'a']=newnode;
     }
-    else
-
-		insertword(word,pos+1,root->ptrs[word[pos]]);
+	insertword(word,pos+1,root->ptrs[word[pos]-'a']);
 }
 
+/*
+Time Complexity: O(m) since we have to search for m letters in a word
+Space Complexity: No space complexity for search operation as such*/
 int find(string key, int pos, node * root){
-	if ((key != root->Word) && (root->ptrs[key[pos]] != NULL))
-		return find(key, pos + 1, root->ptrs[key[pos]]);
+	if ((key != root->Word) && (root->ptrs[key[pos]-'a'] != NULL))
+		return find(key, pos + 1, root->ptrs[key[pos]-'a']);
 	else if (key == root->Word){
 		cout << "The spelling of the word '" << root->Word << "' is correct" << endl;
 		//found = 1;
@@ -49,8 +55,14 @@ int find(string key, int pos, node * root){
 		return false;
 	}
 }
+
+/*
+Very important concept in this method is the entire word is stored after the last letter as last node of each word
+The Word string at the end of each word will re-store the entire word which is returned back in the print methods
+This could mean a lot of space complexity for large word sets*/
 void printall(node * root){
-    for(int i=0;i<256;i++)
+	if (root == NULL) return;
+	for(int i=0;i<26;i++)
         if(root->ptrs[i]!=NULL){
             printall(root->ptrs[i]);
         }
@@ -58,9 +70,13 @@ void printall(node * root){
         cout<<" -> "<<root->Word<<endl;
 }
  
+/*
+Because the words are stored in entirity, at the end of each word, we can retrieve them to print it
+Time Complexity: O(mn) worst case
+*/
 void suggest(string key,int pos, node * root){
-    if((key != root->Word) && (root->ptrs[key[pos]] != NULL)){
-            suggest(key,pos+1,root->ptrs[key[pos]]);
+    if((key != root->Word) && (root->ptrs[key[pos]-'a'] != NULL)){
+            suggest(key,pos+1,root->ptrs[key[pos]-'a']);
     }
     else{
             printall(root);
@@ -71,8 +87,8 @@ int main(){
     ifstream in("wordlist.txt");
     string word,current="",key;
      node* root = NULL;
-    while(!in.eof()){
-        getline(in,word);
+    while(getline(in,word)){
+		transform(word.begin(), word.end(), word.begin(), tolower);
         insertword(word,0,root);
     }
     in.close();

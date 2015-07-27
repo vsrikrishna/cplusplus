@@ -9,38 +9,31 @@ void print(int *input, int n)
 
 void shiftRight(int* arr, int low, int high)
 {
-	int root = low;
-	while ((root * 2) + 1 <= high)
-	{
-		int leftChild = (root * 2) + 1;
-		int rightChild = leftChild + 1;
-		int swapIdx = root;
-		/*Check if root is less than left child*/
-		if (arr[swapIdx] < arr[leftChild])
-		{
-			swapIdx = leftChild;
-		}
-		/*If right child exists check if it is less than current root*/
-		if ((rightChild <= high) && (arr[swapIdx] < arr[rightChild]))
-		{
-			swapIdx = rightChild;
-		}
-		/*Make the biggest element of root, left and right child the root*/
-		if (swapIdx != root)
-		{
-			int tmp = arr[root];
-			arr[root] = arr[swapIdx];
-			arr[swapIdx] = tmp;
-			/*Keep shifting right and ensure that swapIdx satisfies
-			heap property aka left and right child of it is smaller than
-			itself*/
-			root = swapIdx;
-		}
-		else
-		{
-			break;
-		}
-	}
+   if ((low * 2) > high) return;
+   int leftChild = (low * 2) + 1;
+   int rightChild = leftChild + 1;
+   int swapIdx = low;
+   /*Check if root is less than left child*/
+   if ((leftChild <= high) && arr[swapIdx] < arr[leftChild])
+   {
+      swapIdx = leftChild;
+   }
+   /*If right child exists check if it is less than current root*/
+   if ((rightChild <= high) && (arr[swapIdx] < arr[rightChild]))
+   {
+   	  swapIdx = rightChild;
+   }
+   /*Make the biggest element of root, left and right child the root*/
+   if (swapIdx != low)
+   {
+   	  int tmp = arr[low];
+   	  arr[low] = arr[swapIdx];
+   	  arr[swapIdx] = tmp;
+   	  /*Keep shifting right and ensure that swapIdx satisfies
+   	  heap property aka left and right child of it is smaller than
+   	  itself*/
+      shiftRight(arr,swapIdx,high);
+   }
 }
 void heapify(int* arr, int low, int high)
 {
@@ -72,7 +65,7 @@ void heapSort(int* arr, int size)
 }
 
 int main(){
-	int input[9] = {0,1,2,3,4,5,6,7,8};
+	int input[9] = {8,7,6,5,3,2,4,1};
 	cout << "Input: ";
 	print(input, 9);
 	heapSort(input, 9);

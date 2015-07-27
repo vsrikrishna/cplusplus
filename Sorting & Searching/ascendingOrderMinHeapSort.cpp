@@ -8,6 +8,17 @@ Second gotcha:
 Using arrays instead of vector. With vector very easy to debug(dont have to use memory monitor) and deleting top element is easy
 Next step is to do the same using arrays and doing a descending order sort
 
+//Things to help remember this algorithm
+1) Where to start this problem, with the realization that 2*index is left child and 2*index+1 is right child
+2) Then we should solve the problem from middle. Determine middle is easy by taking the (high-low)/2
+3) Then exchange the minimum element with the minimum children elements. 
+4) After exchange make sure the minimal property of the tree is maintained. Run findMinimum if the node has children
+5) Do this till you reach the first element in the array
+6) After i=0 reached, the minimum element is in the root of the tree
+7) Print this out, remove the element from tree(Very Important)
+8) Again start over from the middle by passing vector, low, high to Step 1
+9) Repeat this process till vector is empty
+
 Time Complexity: O(nlogn) - We find minimum n times. finding minimum using trees is log n. So nlog n is 
 Space Complexity: O(1)
 */
@@ -22,7 +33,7 @@ void swap(int& num1, int& num2){
 }
 
 void findMinimun(vector<int> &vec, int low, int high){
-	if (low * 2 + 1 >= high)
+	if (low * 2 >= high)
 		return;
 	int swapId = low;
 	int leftChild = (low * 2) + 1;
@@ -57,7 +68,7 @@ void heapSort(vector<int> &vec, int low, int high){
 }
 int main(){
 	vector<int> v = { 8, 7, 6, 5, 4, 3, 2, 1, 0 };
-	cout << "The aorted array is: ";
+	cout << "The sorted array is: ";
 	heapSort(v, 0, v.size()-1);
 	getchar();
 	return 0;

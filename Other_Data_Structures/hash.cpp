@@ -50,10 +50,9 @@ public:
 class HashMap {
 
 private:
-   LinkedHashEntry **table;
+	LinkedHashEntry *table[TABLE_SIZE];
 public:
    HashMap() {
-      table = new LinkedHashEntry* [TABLE_SIZE];
       for (int i = 0; i < TABLE_SIZE; i++)
          table[i] = NULL;
    }
@@ -126,7 +125,6 @@ public:
 			}
 		 }
 	  }
-      delete[] table;
    }
 };
 
@@ -135,7 +133,7 @@ int main(){
    m1.put(310,955);
    m1.put(310,800);
    m1.put(410,500);
-   m1.remove(310);
+ //  m1.remove(310);
    //int retVal = m1.get(310);
    cout << "retVal is " << m1.get(410) << endl;
    cout << "retVal is " << m1.get(310) << endl;

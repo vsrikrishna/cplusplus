@@ -10,67 +10,63 @@ void print(int *input, int n)
 void shiftRight(int* arr, int low, int high)
 {
    if ((low * 2) > high) return;
-   int leftChild = (low * 2) + 1;
-   int rightChild = leftChild + 1;
-   int swapIdx = low;
-   /*Check if root is less than left child*/
-   if ((leftChild <= high) && arr[swapIdx] < arr[leftChild])
-   {
-      swapIdx = leftChild;
+   int mid = low + (high - low) / 2;
+   int swapIdx = mid;
+   int leftChild, rightChild;
+   while (mid >= 0){
+	   leftChild = (2*mid);
+	   rightChild = leftChild + 1;
+	   /*Check if root is less than left child*/
+	   if ((leftChild <= high) && arr[swapIdx] < arr[leftChild])
+	   {
+		   swapIdx = leftChild;
+	   }
+	   /*If right child exists check if it is less than current root*/
+	   if ((rightChild <= high) && (arr[swapIdx] < arr[rightChild]))
+	   {
+		   swapIdx = rightChild;
+	   }
+	   /*Make the biggest element of root, left and right child the root*/
+	   if (swapIdx != low)
+	   {
+		   int tmp = arr[low];
+		   arr[low] = arr[swapIdx];
+		   arr[swapIdx] = tmp;
+	   }
+	   mid--;
    }
-   /*If right child exists check if it is less than current root*/
-   if ((rightChild <= high) && (arr[swapIdx] < arr[rightChild]))
-   {
-   	  swapIdx = rightChild;
-   }
-   /*Make the biggest element of root, left and right child the root*/
-   if (swapIdx != low)
-   {
-   	  int tmp = arr[low];
-   	  arr[low] = arr[swapIdx];
-   	  arr[swapIdx] = tmp;
-   	  /*Keep shifting right and ensure that swapIdx satisfies
-   	  heap property aka left and right child of it is smaller than
-   	  itself*/
-      shiftRight(arr,swapIdx,high);
-   }
-}
-void heapify(int* arr, int low, int high)
-{
-	/*Start with middle element. Middle element is chosen in
-	such a way that the last element of array is either its
-	left child or right child*/
-	int midIdx = (high - low - 1) / 2;
-	while (midIdx >= 0)
-	{
-		shiftRight(arr, midIdx, high);
-		--midIdx;
-	}
 }
 void heapSort(int* arr, int size)
 {
 	/*This will put max element in the index 0*/
-	heapify(arr, 0, size - 1);
 	int high = size - 1;
+	shiftRight(arr, 0, high);	
 	while (high > 0)
 	{
 		/*Swap max element with high index in the array*/
 		int tmp = arr[high];
 		arr[high] = arr[0];
 		arr[0] = tmp;
-		--high;
+		high--;
 		/*Ensure heap property on remaining elements*/
 		shiftRight(arr, 0, high);
 	}
 }
 
 int main(){
-	int input[9] = {8,7,6,5,3,2,4,1};
+	int input[9] = {0,1,2,3,4,5,6,7,8};
+	int input2[7] = {1,1,1,1,1,1,1};
 	cout << "Input: ";
 	print(input, 9);
 	heapSort(input, 9);
 	cout << "\nOutput: ";
 	print(input, 9);
+	cout << "\n";
+	cout << "Input: ";
+	print(input2, 7);
+	heapSort(input2, 7);
+	cout << "\nOutput: ";
+	print(input2, 7);
 	cout << "\n";
 	getchar();
 	return 0;

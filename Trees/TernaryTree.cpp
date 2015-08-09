@@ -23,9 +23,12 @@ Node* createNode(char *word){
 	N1->stringEnd = 0;
 	return N1;
 }
-void addWord(Node*& leaf, char* word){
+void addWord(Node* leaf, char* word){
 	if (leaf == NULL){
-		leaf = createNode(word);
+		leaf = new Node;
+		leaf->value = *word;
+		leaf->left = leaf->right = leaf->equal = NULL;
+		leaf->stringEnd = 0;
 	}
     if (leaf->value == *word){
         if (*(word + 1)){

@@ -35,41 +35,45 @@ void swap(int& num1, int& num2){
 void findMinimun(vector<int> &vec, int low, int high){
 	if (low * 2 >= high)
 		return;
-	int swapId = low;
-	int leftChild = (low * 2) + 1;
-	int rightChild = leftChild + 1;
-	if (vec[swapId]>vec[leftChild] && leftChild <= high){
-		swapId = leftChild;
-	}
-	if (rightChild <= high  && vec[swapId] > vec[rightChild]){
-		swapId = rightChild;
-	}
-	if (low != swapId){
-		swap(vec[low], vec[swapId]);
-		findMinimun(vec, swapId, high);
-	}
-}
-void minHeap(vector<int> &vec, int low, int high){
-	int mid = (high - low - 1) / 2;
-	while (mid >=low){
-		findMinimun(vec, mid, high);
-	  mid--;
+	int mid = low + (high -low) / 2;
+	int swapId = mid;
+	while (mid>=0){
+		int leftChild = (mid * 2) + 1;
+		int rightChild = leftChild + 1;
+		if ((leftChild <= high) && (vec[swapId] > vec[leftChild])){
+			swapId = leftChild;
+		}
+		if ((rightChild <= high) && (vec[swapId] > vec[rightChild])){
+			swapId = rightChild;
+		}
+		if (mid != swapId){
+			swap(vec[mid], vec[swapId]);
+		}
+		mid--;
 	}
 }
+
 void heapSort(vector<int> &vec, int low, int high){
-	minHeap(vec, low, high);
-	int index = high-1;
+    findMinimun(vec,low,high);
+    int index = high-1;
 	while (!vec.empty()){
-	  cout << vec[0] << " ";
-	  vec.erase(vec.begin()); //remove top minimum element
-	  findMinimun(vec, low, vec.size() - 1);
+      cout << vec[0] << " ";
+      vec.erase(vec.begin()); //remove top minimum element
+      findMinimun(vec, low, vec.size() - 1);
 	}
-	cout << endl;
+    cout << endl;
 }
 int main(){
+    //Test Case 1
 	vector<int> v = { 8, 7, 6, 5, 4, 3, 2, 1, 0 };
 	cout << "The sorted array is: ";
 	heapSort(v, 0, v.size()-1);
+
+	//Test Case 2
+	vector<int> v2 = { 1,1,1,1,1,1,1};
+	cout << "The sorted array is: ";
+	heapSort(v2, 0, v2.size() - 1);
+
 	getchar();
 	return 0;
 }

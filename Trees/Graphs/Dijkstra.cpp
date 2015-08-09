@@ -1,11 +1,20 @@
 /*
 10/28/2013
 Coursera C++ Course 
-Graph algorithms and graph representation are a critical tool in CS. We want to create a graph as an ADT (Abstract Data Type) using C++ classes. The basic problem will be to write Dijkstra’s algorithm as a class member function (method in OO speak). You should already know Dijkstra’s algorithm for the shortest path problem from prior experience, but it will be reviewed in class. It is the basis for many route calculations and optimizations programs. 
+Graph algorithms and graph representation are a critical tool in CS. We want to create a graph as an ADT (Abstract Data Type) using C++ classes. 
+The basic problem will be to write Dijkstra’s algorithm as a class member function (method in OO speak). 
+You should already know Dijkstra’s algorithm for the shortest path problem from prior experience, but it will be reviewed in class. 
+It is the basis for many route calculations and optimizations programs. 
 
-There are 2 basic implementations used for graphs – one is edge lists, and the other is connectivity matrices. You can decide which to use, but comment on your choice. 
+There are 2 basic implementations used for graphs – one is edge lists, and the other is connectivity matrices.
+You can decide which to use, but comment on your choice. 
 
-Basic problem:  Write a set of constructors for declaring and initializing a graph. An edge will have a positive cost that is its distance. Have a procedure that produces a randomly generated set of edges with positive distances.  Assume the graphs are undirected. The random graph procedure should have edge density as a parameter and distance range as a parameter. So a graph whose density is 0.1 would have 10% of its edges picked at random and its edge distance would be selected at random from the distance range. The procedure should run through all possible undirected edges, say (i,j) and place the edge in the graph if a random probability calculation is less than the density. Compute for a set of randomly generated graphs an average shortest path.
+Basic problem:  Write a set of constructors for declaring and initializing a graph. An edge will have a positive cost that is its distance. 
+Have a procedure that produces a randomly generated set of edges with positive distances.  Assume the graphs are undirected. 
+The random graph procedure should have edge density as a parameter and distance range as a parameter. 
+So a graph whose density is 0.1 would have 10% of its edges picked at random and its edge distance would be selected at random from 
+the distance range. The procedure should run through all possible undirected edges, say (i,j) and place the edge in the graph if a random 
+probability calculation is less than the density. Compute for a set of randomly generated graphs an average shortest path.
 
 Turn in:  Printout of program, 200 words on what you learned, and output showing the average path length calculation. Use densities: 20% and 40% on a graph of 50 nodes with a distance range of 1.0 to 10.0.   To get an average path length, compute the 49 paths:
 
@@ -18,12 +27,31 @@ Keep in mind: good style – choice of identifiers, short functions, good document
 Tips:  Hand-simulate your algorithm on a small graph.
 
 Things I learnt during this programming homework
-This programming assignment was a good learning experience for me. Starting from graph theory concepts to using some basic data structures there were lot of skillsets which improved during the course of this HW. To be more specific, I will list my improvements in 2 areas: graph theory and programming concepts. 
-Under graph theory my understanding of dijkstra’s shortest path algorithm, monte carlo simulation, building a graph using connectivity matrix or edge lists improved drastically. Some of these concepts like Monte Carlo simulation, edge lists or connectivity matrix graph implementation were new to me.  I was able to contrast and compare edge lists and connectivity matrix implementation for graph creation. Finally I picked edge lists implementation since it is easy and sufficient for spare graph scenario. It was good exposure to learn about graph theory and simultaneously implement these concepts using C++ programming language.
+This programming assignment was a good learning experience for me.
+Starting from graph theory concepts to using some basic data structures there were lot of skillsets which improved during the course of this HW. 
+To be more specific, I will list my improvements in 2 areas: graph theory and programming concepts. 
+Under graph theory my understanding of dijkstra’s shortest path algorithm, monte carlo simulation, building a graph using connectivity matrix or edge lists 
+improved drastically. Some of these concepts like Monte Carlo simulation, edge lists or connectivity matrix graph implementation were new to me. 
+I was able to contrast and compare edge lists and connectivity matrix implementation for graph creation. 
+Finally I picked edge lists implementation since it is easy and sufficient for spare graph scenario. 
+It was good exposure to learn about graph theory and simultaneously implement these concepts using C++ programming language.
 
-Under programming concepts, using vector, priority queue, heap data structures; using random functions for probability creation, overloading weak ordering comparator function in basic data structure (heap or priority queue) were highlighting skillsets I learnt. Basic C++ programming skills like using multiple constructors, deciding between class and struct usage, using constant keyword, commenting on functions or classes and using easy to understand variable names were valuable improvements. 
+Under programming concepts, using vector, priority queue, heap data structures; using random functions for probability creation, 
+overloading weak ordering comparator function in basic data structure (heap or priority queue) were highlighting skillsets I learnt.
+Basic C++ programming skills like using multiple constructors, deciding between class and struct usage, using constant keyword, 
+commenting on functions or classes and using easy to understand variable names were valuable improvements. 
 
-During the course of this assignment, I referenced several websites, amongst them wikepedia, cplusplus.com, stackoverflow were notable ones. HW2 Discussion forum was very useful. Inputs from peers in the forum was timely and to the point.
+During the course of this assignment, I referenced several websites, amongst them wikepedia, cplusplus.com, stackoverflow were notable ones. 
+HW2 Discussion forum was very useful. Inputs from peers in the forum was timely and to the point.
+
+//Quick Read
+1) Read constructor to see how the edges are stored? Look at the vector<vector > > data structure
+1) Read random fill and understand how loops are avoided when values are populated
+
+2) Read Shortest Path Algorithm
+2a) Understand how the priority queue is used. How to construct it?
+2b) How compartor function, EdgeSort works?
+2c) What data structures are used in the function?
 */
 
 #include <iostream>
@@ -50,6 +78,11 @@ struct Edge {
 // Used to provide max & min weak order compartor function for elements
 // Default usage would provide max weak ordering of elements
 // Setting revparam variable to true would enable minimum element weak ordering
+// The below format is a function object used for comparing cost in 2 objects
+// We could use function pointers or regular functions but objects provide more
+// flexibility for comparison
+// Check http://www.cprogramming.com/tutorial/functors-function-objects-in-c++.html for explanation
+//
 class edgeSort {
     bool reverse;
 public:
@@ -60,6 +93,7 @@ public:
         return reverse ? (lhs.cost < rhs.cost) : (lhs.cost > rhs.cost); 
     }
 };
+
 
 // Use to generate an unconnected graph for n vertexes and given density value
 // The methods in this class are used to run dijkstra's shortest path algorithm 
@@ -134,7 +168,7 @@ double Graph::shortestPath(int num){
 
     std::vector<double> distance; //stores distance of each vertex from source
     std::vector<bool> visited;//stores information if a particular vertex is visited from source vertex
-    std::priority_queue<Edge,std::vector<Edge>, edgeSort> myPQ; //priority queue used to store edges with minimum cost vertex at top
+	std::priority_queue<Edge,std::vector<Edge>,edgeSort> myPQ (edgeSort(false)); //priority queue used to store edges with minimum cost vertex at top
     
     //Initialization of vectors
     for(int i =0 ; i < num; i++){
@@ -173,13 +207,14 @@ double Graph::shortestPath(int num){
 
         //Iterate through neighbors and accumulate shortest distance
         double altCost;
-        for(std::vector<Edge>::iterator eItr = neighbors.begin(); eItr!= neighbors.end(); eItr++){
-            altCost = distance[minEdge.head] + eItr->cost;
+        //for(std::vector<Edge>::iterator eItr = neighbors.begin(); eItr!= neighbors.end(); eItr++){
+		for (auto  eItr:neighbors){
+		   altCost = distance[minEdge.head] + eItr.cost;
 
             //If calculated distance is lesser than stored distance then update it
-            if(altCost < distance[eItr->head] && !visited[eItr->head]){
-                distance[eItr->head] = altCost;
-                myPQ.push(*eItr);
+            if(altCost < distance[eItr.head] && !visited[eItr.head]){
+                distance[eItr.head] = altCost;
+                myPQ.push(eItr);
             }
         }
     }
@@ -229,8 +264,9 @@ double monteCarloSimulation(const int nodeCount, const double density, const dou
 }
 int main(){
     std::cout<<"::::::::::::::::::::::::::: Starting Simulation :::::::::::::::::::::::::::" << std::endl;
-    std::cout<<"Simulation density: 0.4, Average shortest path length: "<<monteCarloSimulation(50,0.4,1.0,10.0,10000)<<std::endl;
-    std::cout<<"Simulation density: 0.2, Average shortest path length: "<<monteCarloSimulation(50,0.2,1.0,10.0,10000)<<std::endl;
+    std::cout<<"Simulation density: 0.4, Average shortest path length: "<<monteCarloSimulation(50,0.4,1.0,10.0,100)<<std::endl;
+    std::cout<<"Simulation density: 0.2, Average shortest path length: "<<monteCarloSimulation(50,0.2,1.0,10.0,100)<<std::endl;
     std::cout<<":::::::::::::::::::::::::::  Simulation Ended   :::::::::::::::::::::::::::" << std::endl;
-    return 0;
+	getchar();
+	return 0;
 }

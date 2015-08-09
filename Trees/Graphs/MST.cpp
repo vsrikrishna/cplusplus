@@ -19,7 +19,10 @@ Edge weights are NOT necessarily different
 #include <algorithm>
 #include <fstream>
 #include <string>
-#include <boost/lexical_cast.hpp>
+#include <sstream>
+#include <limits>
+
+using namespace std;
 
 //@brief: Probability function to provide random value to compare with density
 //@output: probability of occurence
@@ -132,7 +135,9 @@ Graph::Graph(std::string inFile){
     //get node count and resize adjacency list for node count
     std::string nodeCnt;
     getline(inData, nodeCnt);
-    int num = boost::lexical_cast<int>(nodeCnt);
+	stringstream ss; int num;
+    ss << nodeCnt;
+	ss >> num;
     adjList.resize(num);
     
     //get input from file line by line and store edge info into adjList vector data structure
@@ -434,7 +439,7 @@ int Kruskal::MSTlength(Graph &G){
     Edge minEdge;//temporary edge to store minimum element from priority queue
        
     //Continue looping till priority queue is empty
-        while(!myPQ.empty()){
+    while(!myPQ.empty()){
             //Get minimum weight edge from PQ
             minEdge = myPQ.top();
        
@@ -453,7 +458,7 @@ int Kruskal::MSTlength(Graph &G){
     }
        
     std::cout<<"Kruskal Algorithm Spanning Tree Edges"<<std::endl;
-          std::cout<<"Edges   Weight"<<std::endl;
+    std::cout<<"Edges   Weight"<<std::endl;
           
           //Print the edges of MST and calculate the total cost of the MST
     double cost = 0.0;
@@ -493,5 +498,7 @@ int main(){
     std::cout << "Minimum spanning tree length using prim's algorithm is: " << length << std::endl;
     length = G.kruskalMST();
     std::cout << "Minimum spanning tree length using Kruskal's algorithm is: " << length << std::endl;
-    return 0;
+	cin.clear();
+	getchar();
+	return 0;
 }

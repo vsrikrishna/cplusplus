@@ -27,10 +27,10 @@ void shiftRight(int* arr, int low, int high)
 		   swapIdx = rightChild;
 	   }
 	   /*Make the biggest element of root, left and right child the root*/
-	   if (swapIdx != low)
+	   if (swapIdx != mid)
 	   {
-		   int tmp = arr[low];
-		   arr[low] = arr[swapIdx];
+		   int tmp = arr[mid];
+		   arr[mid] = arr[swapIdx];
 		   arr[swapIdx] = tmp;
 	   }
 	   mid--;
@@ -54,13 +54,13 @@ void heapSort(int* arr, int size)
 }
 
 int main(){
-	int input[9] = {0,1,2,3,4,5,6,7,8};
+	int input[8] = {0,1,2,3,4,5,6,7};
 	int input2[7] = {1,1,1,1,1,1,1};
 	cout << "Input: ";
-	print(input, 9);
-	heapSort(input, 9);
+	print(input, 8);
+	heapSort(input, 8);
 	cout << "\nOutput: ";
-	print(input, 9);
+	print(input, 8);
 	cout << "\n";
 	cout << "Input: ";
 	print(input2, 7);

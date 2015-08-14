@@ -68,7 +68,7 @@ string convertToPostFix(string& str){
 			if (expStack.empty()){
 				throw std::runtime_error("missing left paren");
 			}
-			expStack.pop();
+			expStack.pop(); //throwing out '(' 
 			postFix << ' ';
 		}
 		else{
@@ -78,7 +78,7 @@ string convertToPostFix(string& str){
 
 	// Started with a left paren, now close it:
 	// While top of stack is not a left paren
-	while (!expStack.empty() && '(' != expStack.top()) {
+	while (!expStack.empty() && expStack.top() != '(') {
 		postFix << ' ' << expStack.top();
 		expStack.pop();
 	}

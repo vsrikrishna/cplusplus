@@ -77,6 +77,11 @@ void Graph::TopologicalSort(){
 void Graph::addEdge(int v, int w)
 {
 	adj[v].push_back(w); // Add w to v’s list.
+	cout << "Printing out vector "<<v<<" values" << endl;
+	for (auto a : adj[v]){
+		cout << a << " ";
+	}
+	cout << endl;
 }
 
 // DFS traversal of the vertices reachable from v. It uses recursive DFSUtil()
@@ -90,9 +95,12 @@ void Graph::DFS(int v)
 
 	// Recur for all the vertices adjacent to this vertex
 	vector<int>::iterator i;
-	for (i = adj[v].begin(); i != adj[v].end(); ++i)
-	if (!visited[*i])
-		DFS(*i);
+	for (i = adj[v].begin(); i != adj[v].end(); ++i){
+		cout << endl;
+		cout << "visited one, value is " << *i << endl;
+		if (!visited[*i])
+			DFS(*i);
+	}
 
 }
 
@@ -134,11 +142,17 @@ int main()
 {
 	// Create a graph given in the above diagram
 	Graph g(4);
+	cout << "Adding Edge 0,1"<<endl;
 	g.addEdge(0, 1);
+	cout << "Adding Edge 0,2"<<endl;
 	g.addEdge(0, 2);
+	cout << "Adding Edge 1,2"<<endl;
 	g.addEdge(1, 2);
+	cout << "Adding Edge 2,0"<<endl;
 	g.addEdge(2, 0);
+	cout << "Adding Edge 2,3"<<endl;
 	g.addEdge(2, 3);
+	cout << "Adding Edge 3,3"<<endl;
 	g.addEdge(3, 3);
 
 	cout << "Following is Depth First Traversal (starting from vertex 2) \n";

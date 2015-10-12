@@ -164,6 +164,9 @@ int calculate(string& str)
 					int result = compute(num1,num2,c);
 					operandStack.push(result);
 				}
+				if (!operandStack.empty() && !getPrecedence(operatorStack.top(),c)){
+					operatorStack.push(c);
+				}
 			}
 		}
 		else{

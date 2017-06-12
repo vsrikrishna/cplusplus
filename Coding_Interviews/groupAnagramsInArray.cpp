@@ -28,22 +28,20 @@ ll gcd(ll x, ll y) { return y ? gcd(y, x%y) : x; }
 
 int main()
 {
-  vector<string> in = {"cat","tac","act","top","pot","meow"};
-  unordered_map<int,vector<string> > hashMap;
+  vector<string> in = {"cat","tac","act","top","pot","meow","abu"};
+  unordered_map<string,vector<string> > hashMap;
   //int size = in.size();
   for(int i=0;i<in.size();i++){
     string tmp=in[i];
     transform(tmp.begin(),tmp.end(),tmp.begin(),::tolower);
-    int key=0;
-    for(int j=0;j<tmp.size();j++){
-      key+=tmp[j]-'a';
-    }
-    if(hashMap.find(key) != hashMap.end()){
-      hashMap[key].push_back(tmp);
+    string sortStr = tmp;
+    sort(sortStr.begin(),sortStr.end());
+    if(hashMap.find(sortStr) != hashMap.end()){
+      hashMap[sortStr].push_back(tmp);
     }else{
       vector<string> strVec;
       strVec.push_back(tmp);
-      hashMap.insert(make_pair(key,strVec));
+      hashMap.insert(make_pair(sortStr,strVec));
     }
   }
   for(const auto& a:hashMap){
